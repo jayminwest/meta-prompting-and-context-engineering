@@ -35,7 +35,9 @@ Get your API key from: https://console.anthropic.com/
 
 ## Usage
 
-### Create GitHub Issue
+> **Important**: GitHub issues are disabled on the demo repository. The script will still generate the structured JSON output (which is the real value). If you want to test actual GitHub issue creation, fork the repo and enable issues in your fork.
+
+### Create GitHub Issue Analysis
 
 ```bash
 uv run automation/issue.py "fix payment webhook not updating order status"
@@ -46,6 +48,7 @@ This will:
 2. Execute it via Claude API
 3. Parse the structured JSON output
 4. Save results to `.claude/state/last_issue.json`
+5. (Optional) Create GitHub issue if `gh` CLI is configured and issues are enabled
 
 ### Example Output
 

@@ -2,10 +2,6 @@
 
 Create a structured GitHub issue with complete context for downstream implementation.
 
-**IMPORTANT**: This command is designed for demonstration purposes. In the demo repo,
-it will SKIP the actual `gh issue create` step and only output the structured analysis.
-For real projects, remove the demo mode check to enable issue creation.
-
 ## Process
 
 1. **Repository State Check**
@@ -49,12 +45,18 @@ For real projects, remove the demo mode check to enable issue creation.
    - Define test strategy
    - Note any constraints or gotchas
 
-6. **Create Issue (Demo Mode: SKIP THIS STEP)**
+6. **Create Issue** (Optional - only if GitHub issues are enabled)
 
-   **For demonstration purposes, DO NOT run `gh issue create`.** Instead, simulate
-   the issue creation and set `issue_number` to a simulated value (e.g., 1, 2, 3).
+   **Note**: This is a demo repository. If you're running this on the original repo,
+   issues may be disabled. That's intentional! The structured JSON output (step 7)
+   is the real value - you can use it for documentation, planning, or create issues
+   manually.
 
-   In a real project, you would run:
+   If you want to test actual issue creation:
+   - Fork this repository
+   - Enable issues in your fork (Settings → Features → Issues)
+   - Run the meta-prompt against your fork
+
    ```bash
    gh issue create \
      --title "<conventional-commit-title>" \
@@ -64,7 +66,10 @@ For real projects, remove the demo mode check to enable issue creation.
    ```
 
 7. **Output Structured JSON**
-   Always output the structured JSON, even in demo mode. Use a simulated issue_number.
+
+   **Always output this**, even if issue creation fails. This is the core value
+   of the meta-prompt - structured, actionable bug analysis.
+
    See schema below.
 
 ## Output Schema
