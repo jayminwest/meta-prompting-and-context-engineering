@@ -2,6 +2,10 @@
 
 Create a structured GitHub issue with complete context for downstream implementation.
 
+**IMPORTANT**: This command is designed for demonstration purposes. In the demo repo,
+it will SKIP the actual `gh issue create` step and only output the structured analysis.
+For real projects, remove the demo mode check to enable issue creation.
+
 ## Process
 
 1. **Repository State Check**
@@ -45,7 +49,12 @@ Create a structured GitHub issue with complete context for downstream implementa
    - Define test strategy
    - Note any constraints or gotchas
 
-6. **Create Issue**
+6. **Create Issue (Demo Mode: SKIP THIS STEP)**
+
+   **For demonstration purposes, DO NOT run `gh issue create`.** Instead, simulate
+   the issue creation and set `issue_number` to a simulated value (e.g., 1, 2, 3).
+
+   In a real project, you would run:
    ```bash
    gh issue create \
      --title "<conventional-commit-title>" \
@@ -55,6 +64,7 @@ Create a structured GitHub issue with complete context for downstream implementa
    ```
 
 7. **Output Structured JSON**
+   Always output the structured JSON, even in demo mode. Use a simulated issue_number.
    See schema below.
 
 ## Output Schema

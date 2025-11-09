@@ -50,6 +50,8 @@ See [`examples/bugs/`](examples/bugs/) for detailed documentation of each bug.
 
 ## 🤖 Meta-Prompting Demo
 
+> **Note**: The `/issue` meta-prompt is configured in **demo mode** and will NOT create actual GitHub issues. It only generates structured analysis. This prevents the public repo from being flooded with issues from users testing the tool.
+
 ### Using Claude Code (In-Editor)
 
 ```
@@ -60,7 +62,7 @@ The meta-prompt will:
 1. Search the codebase for relevant files
 2. Trace data flow through the stack
 3. Identify root cause
-4. Generate structured issue with fix approach
+4. Generate structured JSON analysis (without creating a real GitHub issue)
 
 ### Using CLI Automation
 
@@ -234,6 +236,58 @@ uv run automation/issue.py "fix payment webhook"
 ```
 
 See [automation/README.md](automation/README.md) for details.
+
+## 🔧 Adapting for Your Own Project
+
+Want to use these meta-prompts on your own codebase? Here's how:
+
+### Enable Real GitHub Issue Creation
+
+The demo is configured to **skip** actual issue creation. To enable it:
+
+1. Edit `.claude/commands/issue.md`
+2. Find the section: **"6. Create Issue (Demo Mode: SKIP THIS STEP)"**
+3. Remove the demo mode warning and change it to:
+   ```markdown
+   6. **Create Issue**
+      Run the following command to create the GitHub issue:
+      ```bash
+      gh issue create \
+        --title "<conventional-commit-title>" \
+        --body-file /tmp/issue-body.md \
+        --label "bug" \
+        --label "<component:frontend|backend|fullstack>"
+      ```
+   ```
+
+4. Make sure you have GitHub CLI installed and authenticated:
+   ```bash
+   gh auth login
+   ```
+
+### Customize the Meta-Prompt
+
+Edit `.claude/commands/issue.md` to match your project:
+
+- Update file paths in **Context Gathering** section
+- Modify **Map Dependencies** to reflect your architecture
+- Add your own **Architecture Docs** in `.claude/commands/docs/`
+- Update **Example Output** to match your issue format
+
+### Add Your Own Meta-Prompts
+
+Create new commands in `.claude/commands/`:
+
+- `/plan` - Generate implementation plans
+- `/review` - Code review automation
+- `/test` - Test generation
+- `/refactor` - Refactoring suggestions
+
+Each should follow the same pattern:
+1. Clear process steps
+2. Structured output schema
+3. Example outputs
+4. Architecture context
 
 ## 🎯 Learning Objectives
 
