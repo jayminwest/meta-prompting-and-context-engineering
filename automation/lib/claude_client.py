@@ -3,7 +3,14 @@ Wrapper around Claude Code SDK for programmatic command execution.
 """
 
 import os
+from pathlib import Path
 from typing import Iterator
+from dotenv import load_dotenv
+
+# Load .env file from project root
+project_root = Path(__file__).parent.parent.parent
+env_path = project_root / ".env"
+load_dotenv(env_path)
 
 # Note: This is a placeholder - actual Claude Code SDK may differ
 # Adjust based on official SDK when available
