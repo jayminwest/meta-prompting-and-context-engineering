@@ -45,32 +45,11 @@ Create a structured GitHub issue with complete context for downstream implementa
    - Define test strategy
    - Note any constraints or gotchas
 
-6. **Create Issue** (Optional - only if GitHub issues are enabled)
-
-   **Note**: This is a demo repository. If you're running this on the original repo,
-   issues may be disabled. That's intentional! The structured JSON output (step 7)
-   is the real value - you can use it for documentation, planning, or create issues
-   manually.
-
-   If you want to test actual issue creation:
-   - Fork this repository
-   - Enable issues in your fork (Settings → Features → Issues)
-   - Run the meta-prompt against your fork
-
-   ```bash
-   gh issue create \
-     --title "<conventional-commit-title>" \
-     --body-file /tmp/issue-body.md \
-     --label "bug" \
-     --label "<component:frontend|backend|fullstack>"
-   ```
-
-7. **Output Structured JSON**
-
-   **Always output this**, even if issue creation fails. This is the core value
-   of the meta-prompt - structured, actionable bug analysis.
-
+6. **Output Structured JSON**
    See schema below.
+
+   **Note**: GitHub issue creation is handled by the automation script
+   based on the CREATE_GITHUB_ISSUES environment variable.
 
 ## Output Schema
 

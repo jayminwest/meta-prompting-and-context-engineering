@@ -50,8 +50,6 @@ See [`examples/bugs/`](examples/bugs/) for detailed documentation of each bug.
 
 ## 🤖 Meta-Prompting Demo
 
-> **Note**: GitHub issues are disabled on this demo repository to prevent spam. The real value is in the **structured JSON output** that the meta-prompt generates. If you want to test actual issue creation, fork this repo and enable issues in your fork's settings.
-
 ### Using Claude Code (In-Editor)
 
 ```
@@ -70,11 +68,12 @@ The meta-prompt will:
 uv run automation/issue.py "fix payment webhook not updating order status"
 ```
 
+This generates a JSON analysis (always) and optionally creates a GitHub issue.
+
 Output saved to `.claude/state/last_issue.json`:
 
 ```json
 {
-  "issue_number": 1,
   "title": "fix: payment webhook not updating order status",
   "root_cause": "Webhook handler not registered in server.ts",
   "affected_files": [...],
@@ -82,6 +81,16 @@ Output saved to `.claude/state/last_issue.json`:
   "test_strategy": "..."
 }
 ```
+
+**Optional: Create GitHub Issues**
+
+To automatically create GitHub issues, set in your `.env`:
+
+```bash
+CREATE_GITHUB_ISSUES=true
+```
+
+Requires `gh` CLI installed and authenticated. By default, only JSON output is generated (no GitHub issues created).
 
 ## 🏗️ Architecture
 

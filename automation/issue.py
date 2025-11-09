@@ -7,6 +7,8 @@ Usage:
 """
 
 import json
+import os
+import subprocess
 import sys
 from pathlib import Path
 from typing import Optional
@@ -84,16 +86,6 @@ def create(description: str):
             Path(".claude/state/last_error.txt").write_text(output)
             sys.exit(1)
 
-        # Display results
-        console.print(Panel.fit(
-            f"[bold green]✓ Issue #{result['issue_number']} created[/bold green]\n\n"
-            f"[bold]Title:[/bold] {result['title']}\n"
-            f"[bold]Summary:[/bold] {result['summary']}\n"
-            f"[bold]Affected Files:[/bold] {len(result.get('affected_files', []))} files",
-            title="Success",
-            border_style="green",
-        ))
-
         # Save structured output for downstream commands
         state_dir = Path(".claude/state")
         state_dir.mkdir(parents=True, exist_ok=True)
@@ -101,8 +93,85 @@ def create(description: str):
         output_path = state_dir / "last_issue.json"
         output_path.write_text(json.dumps(result, indent=2))
 
+        # Display results
+        console.print(Panel.fit(
+            f"[bold green]✓ Issue analysis complete[/bold green]\n\n"
+            f"[bold]Title:[/bold] {result['title']}\n"
+            f"[bold]Summary:[/bold] {result['summary']}\n"
+            f"[bold]Affected Files:[/bold] {len(result.get('affected_files', []))} files",
+            title="Success",
+            border_style="green",
+        ))
+
         console.print(f"\n[dim]Structured output saved to {output_path}[/dim]")
-        console.print(f"[dim]View issue: gh issue view {result['issue_number']}[/dim]\n")
+
+        # Optionally create GitHub issue
+        create_github_issue = os.getenv("CREATE_GITHUB_ISSUES", "false").lower() == "true"
+
+        if create_github_issue:
+            console.print("\n[cyan]Creating GitHub issue...[/cyan]")
+            try:
+                # Create issue body from result
+                issue_body = f"""## Summary
+
+{result['summary']}
+
+## Root Cause
+
+{result['root_cause']}
+
+## Affected Files
+
+"""
+                for file in result.get('affected_files', []):
+                    line_range = file.get('line_range', 'N/A')
+                    issue_body += f"- `{file['path']}` (lines {line_range}): {file['reason']}\n"
+
+                issue_body += f"""
+
+## Implementation Approach
+
+{result.get('implementation_approach', 'N/A')}
+
+## Test Strategy
+
+{result.get('test_strategy', 'N/A')}
+"""
+                if result.get('constraints'):
+                    issue_body += "\n## Constraints\n\n"
+                    for constraint in result['constraints']:
+                        issue_body += f"- {constraint}\n"
+
+                # Write to temp file
+                temp_body = Path(".claude/state/temp_issue_body.md")
+                temp_body.write_text(issue_body)
+
+                # Create issue with gh CLI
+                gh_result = subprocess.run(
+                    [
+                        "gh", "issue", "create",
+                        "--title", result['title'],
+                        "--body-file", str(temp_body),
+                        "--label", "bug"
+                    ],
+                    capture_output=True,
+                    text=True
+                )
+
+                if gh_result.returncode == 0:
+                    issue_url = gh_result.stdout.strip()
+                    console.print(f"[bold green]✓ GitHub issue created:[/bold green] {issue_url}\n")
+                else:
+                    console.print(f"[bold yellow]⚠ Failed to create GitHub issue:[/bold yellow] {gh_result.stderr}")
+                    console.print("[dim]You can create it manually using the JSON output above[/dim]\n")
+
+            except FileNotFoundError:
+                console.print("[bold yellow]⚠ GitHub CLI (gh) not found[/bold yellow]")
+                console.print("[dim]Install it from: https://cli.github.com/[/dim]\n")
+            except Exception as e:
+                console.print(f"[bold yellow]⚠ Failed to create GitHub issue:[/bold yellow] {e}\n")
+        else:
+            console.print("\n[dim]GitHub issue creation disabled (set CREATE_GITHUB_ISSUES=true to enable)[/dim]\n")
 
     except ClaudeError as e:
         console.print(f"[bold red]✗ Claude API Error:[/bold red] {e}")

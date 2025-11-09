@@ -35,9 +35,7 @@ Get your API key from: https://console.anthropic.com/
 
 ## Usage
 
-> **Important**: GitHub issues are disabled on the demo repository. The script will still generate the structured JSON output (which is the real value). If you want to test actual GitHub issue creation, fork the repo and enable issues in your fork.
-
-### Create GitHub Issue Analysis
+### Analyze Issues
 
 ```bash
 uv run automation/issue.py "fix payment webhook not updating order status"
@@ -48,7 +46,7 @@ This will:
 2. Execute it via Claude API
 3. Parse the structured JSON output
 4. Save results to `.claude/state/last_issue.json`
-5. (Optional) Create GitHub issue if `gh` CLI is configured and issues are enabled
+5. **Optionally** create a GitHub issue (if `CREATE_GITHUB_ISSUES=true`)
 
 ### Example Output
 
@@ -60,7 +58,7 @@ Creating issue: fix payment webhook not updating order status
 --- End Output ---
 
 ┌─ Success ─────────────────────────────────┐
-│ ✓ Issue #1 created                        │
+│ ✓ Issue analysis complete                 │
 │                                            │
 │ Title: fix: payment webhook not updating  │
 │ Summary: Orders remain in 'processing'... │
@@ -68,7 +66,30 @@ Creating issue: fix payment webhook not updating order status
 └────────────────────────────────────────────┘
 
 Structured output saved to .claude/state/last_issue.json
-View issue: gh issue view 1
+
+GitHub issue creation disabled (set CREATE_GITHUB_ISSUES=true to enable)
+```
+
+### Creating GitHub Issues
+
+By default, the script **only generates JSON analysis** and does not create GitHub issues.
+
+To enable GitHub issue creation, add to your `.env`:
+
+```bash
+CREATE_GITHUB_ISSUES=true
+```
+
+**Requirements**:
+- GitHub CLI (`gh`) installed: https://cli.github.com/
+- Authenticated: `gh auth login`
+- Repository with issues enabled
+
+When enabled, you'll see:
+
+```
+Creating GitHub issue...
+✓ GitHub issue created: https://github.com/user/repo/issues/1
 ```
 
 ## How It Works
