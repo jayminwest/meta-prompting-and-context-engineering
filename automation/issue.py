@@ -69,7 +69,7 @@ def create(description: str):
             console.print("[dim]--- Agent Output ---[/dim]")
 
             for chunk in client.stream_command("issue", description):
-                console.print(chunk, end="", flush=True)
+                print(chunk, end="", flush=True)  # Use regular print for streaming
                 output += chunk
 
             console.print("\n[dim]--- End Output ---[/dim]\n")
