@@ -17,6 +17,22 @@ Complete setup instructions for the Claude Meta-Prompting Demo.
 
 ## Installation
 
+### Environment Variables (Optional)
+
+For Python automation tools, copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` and add your Anthropic API key:
+
+```bash
+ANTHROPIC_API_KEY=your_key_here
+```
+
+Get your API key from: https://console.anthropic.com/
+
 ### Automatic Setup (Recommended)
 
 ```bash

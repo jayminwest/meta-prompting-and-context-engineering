@@ -17,6 +17,10 @@ A minimal e-commerce cart application designed to demonstrate context engineerin
 git clone <repo-url>
 cd meta-prompting-and-context-engineering
 
+# (Optional) Configure environment variables
+cp .env.example .env
+# Edit .env and add your ANTHROPIC_API_KEY for Python automation
+
 # Run setup script
 ./scripts/setup.sh
 

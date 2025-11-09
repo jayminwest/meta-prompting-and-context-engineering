@@ -17,11 +17,21 @@ cd automation
 uv sync
 ```
 
-Set your API key:
+Set your API key (choose one method):
 
+**Option 1: Environment variable**
 ```bash
 export ANTHROPIC_API_KEY=your_key_here
 ```
+
+**Option 2: .env file (recommended)**
+```bash
+# From project root
+cp .env.example .env
+# Edit .env and add your key
+```
+
+Get your API key from: https://console.anthropic.com/
 
 ## Usage
 
