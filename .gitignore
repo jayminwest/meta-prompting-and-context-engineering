@@ -60,3 +60,5 @@ venv/
 .tmp/
 tmp/
 *.tmp
+
+.playwright-mcp/

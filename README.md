@@ -17,18 +17,29 @@ A minimal e-commerce cart application designed to demonstrate context engineerin
 git clone <repo-url>
 cd meta-prompting-and-context-engineering
 
+# Use the recommended Node.js version (22 LTS)
+# If using nvm: nvm use
+# If using fnm: fnm use
+# Otherwise install Node.js 22 from nodejs.org
+
 # (Optional) Configure environment variables
 cp .env.example .env
 # Edit .env and add your ANTHROPIC_API_KEY for Python automation
 
-# Run setup script
-./scripts/setup.sh
+# Install dependencies and setup database
+pnpm install
+cd apps/backend
+pnpm db:setup    # Initialize database schema
+pnpm db:seed     # Add sample products
+cd ../..
 
 # Start development servers
 pnpm dev
 ```
 
 Open http://localhost:3000 to see the application.
+
+**Important**: The database must be initialized before starting the dev server, or you'll see "no such table: products" errors.
 
 ## 📋 Features
 
